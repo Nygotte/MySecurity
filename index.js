@@ -65,9 +65,6 @@ function number_validation(phone_number) {
 		colors: ['green']
 	})
 
-	prefix = [
-		'$'
-	]
 	var nyx = undefined;
 
 	var startSock = () => {
@@ -117,7 +114,6 @@ function number_validation(phone_number) {
 						const alertWarningButtons = [
 							
     					{index: 1, callButton: {displayText: 'Numero de emergência!', phoneNumber: '190'}},
-						{index: 2, quickReplyButton: {displayText: '⚠️ Cancelar Alarme ⚠️', id: `cancel_alarm${from}#190`}}
 
 						]
 						const alertWarning = {
@@ -137,7 +133,6 @@ function number_validation(phone_number) {
 						const alertWarningButtons = [
 							
     					{index: 1, callButton: {displayText: 'Numero de emergência!', phoneNumber: emergency}},
-						{index: 2, quickReplyButton: {displayText: '⚠️ Cancelar Alarme ⚠️', id: `cancel_alarm${from}#${emergency}`}}
 
 						]
 						const alertWarning = {
@@ -158,7 +153,6 @@ function number_validation(phone_number) {
 						const alertWarningButtons = [
 							
     					{index: 1, callButton: {displayText: 'Numero de emergência!', phoneNumber: '190'}},
-						{index: 2, quickReplyButton: {displayText: '⚠️ Cancelar Alarme ⚠️', id: `cancel_alarm${from}#190`}}
 
 						]
 						const alertWarning = {
@@ -172,12 +166,12 @@ function number_validation(phone_number) {
 					} else {
 
 						var emergency = await convertNumber(req.params.emergency)
-						emergency = emergency.substring(2).substring(0,2) + "9" + emergency.substring(2).split('@')[0];
+						emergency = emergency.substring(2)
+						emergency = emergency.substring(0,2) + "9" + emergency.substring(2).split('@')[0];
 
 						const alertWarningButtons = [
 							
     					{index: 1, callButton: {displayText: 'Numero de emergência!', phoneNumber: emergency}},
-						{index: 2, quickReplyButton: {displayText: '⚠️ Cancelar Alarme ⚠️', id: `cancel_alarm${from}#${emergency}`}}
 
 						]
 						const alertWarning = {
@@ -196,7 +190,6 @@ function number_validation(phone_number) {
 						const alertWarningButtons = [
 							
     					{index: 1, callButton: {displayText: 'Numero de emergência!', phoneNumber: '190'}},
-						{index: 2, quickReplyButton: {displayText: '⚠️ Cancelar Alarme ⚠️', id: `cancel_alarm${from}#190`}}
 
 						]
 						const alertWarning = {
@@ -210,12 +203,12 @@ function number_validation(phone_number) {
 					} else {
 
 						var emergency = await convertNumber(req.params.emergency)
-						emergency = emergency.substring(2).substring(0,2) + "9" + emergency.substring(2).split('@')[0];
+						emergency = emergency.substring(2)
+						emergency = emergency.substring(0,2) + "9" + emergency.substring(2).split('@')[0];
 
 						const alertWarningButtons = [
 							
     					{index: 1, callButton: {displayText: 'Numero de emergência!', phoneNumber: emergency}},
-						{index: 2, quickReplyButton: {displayText: '⚠️ Cancelar Alarme ⚠️', id: `cancel_alarm${from}#${emergency}`}}
 
 						]
 						const alertWarning = {
@@ -234,47 +227,6 @@ function number_validation(phone_number) {
 		}).listen(8080, '127.0.0.1');
 
 		//app.listen(process.env.PORT);
-		
-		nyx.ev.on('messages.upsert', async m => {
-			try {
-
-				const msg = m.messages[0]
-				if (!msg.message) return
-				msg.message = (Object.keys(msg.message)[0] === 'ephemeralMessage') ? msg.message.ephemeralMessage.message: msg.message
-				if (!msg.message) return
-				if (msg.key && msg.key.remoteJid == 'status@broadcast') return
-				if (msg.key.fromMe) return
-				const type = Object.keys(msg.message)[0]
-
-				var body = (type == 'templateButtonReplyMessage') ? msg.message.templateButtonReplyMessage.selectedId: ''
-
-				switch (body) {
-
-					case body:
-
-						from = body.substring(12)
-						from = from.split('#')[0]
-						emergency = body.replace(from, '').substring(13)
-
-						const alertWarningButtons = [
-							
-							{index: 1, callButton: {displayText: 'Numero de emergência!', phoneNumber: emergency}},
-	
-							]
-							const alertWarning = {
-								text: `⚠️ *AVISO* ⚠️\n\n*Seu alarme foi desativado!*\n\nHora: ${time}\nData: ${date}`,
-								footer: 'MySecurity',
-								templateButtons: alertWarningButtons
-							}
-							nyx.sendMessage(from, alertWarning)
-
-				}
-
-
-			} catch(err) {
-				console.log(err)
-			}
-		})
 		return nyx
 	}
 
@@ -302,6 +254,5 @@ function number_validation(phone_number) {
 		saveState);
 
 	return nyx;
-
 
 })()
