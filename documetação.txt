@@ -1,0 +1,5 @@
+|------------------------------------------------------------------|
+| ID | 00 | Usado para quando a porta for aberta.                  |
+| ID | 01 | Usado para quando a porta for fechada.                 |
+| ID | 02 | Usado para quando a porta aberta apos a hora definida. |
+|------------------------------------------------------------------|
