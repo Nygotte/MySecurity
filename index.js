@@ -27,6 +27,7 @@ const {
 	state
 } = useSingleFileAuthState('./database/auth.json');
 
+//Sitema para de verificar numero brasileiro para retonar de maneira correta para o whatsapp
 function number_validation(phone_number) {
 	
     phone_number = phone_number.replace(/\D/g, '');
@@ -64,9 +65,9 @@ function number_validation(phone_number) {
 		align: 'left',
 		colors: ['green']
 	})
-
+	
+	//Inicia o socket do whatsapp
 	var nyx = undefined;
-
 	var startSock = () => {
 		const nyx = makeWASocket["default"]({
 			printQRInTerminal: true,
@@ -77,7 +78,7 @@ function number_validation(phone_number) {
 			}),
 			auth: state
 		})
-		// verificar se o numero existe no wpp e retona o numero no fortato do wpp
+		// verificar se o numero existe no whatsapp e converte o numero no fortato do whatsapp retirando o 9 do numero
 		async function convertNumber(number) {
     
 			if (number.startsWith(55)) {
@@ -99,6 +100,7 @@ function number_validation(phone_number) {
 			}
 			
 		}
+		//Sitema de envio de mensagem para o whatsapp por parammetros de url
 
 		// /Id da menssagem/Numedo do requisitor/Numero de emergencia
 		app.get("/:msgId/:number/:emergency", (req, res) => {
@@ -230,6 +232,7 @@ function number_validation(phone_number) {
 		return nyx
 	}
 
+	// Salva as credenciais do whatsapp e retabelece conexão com o whatsapp
 	nyx = startSock()
 	nyx.ev.on('connection.update',
 		async (update) =>
